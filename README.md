@@ -1,2 +1,3 @@
 # CercaTrova-Personnel
-Repository for emergence personnel side application
+Design Lab project
+- Repository for emergence personnel side application
