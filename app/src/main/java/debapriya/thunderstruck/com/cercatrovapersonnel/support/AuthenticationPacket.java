@@ -10,22 +10,23 @@ import com.google.gson.annotations.SerializedName;
 
 public class AuthenticationPacket {
 
-    @SerializedName("user_id") @Expose
-    private String userID;
+    @SerializedName("personnel_id") @Expose
+    private String personnelId;
+
     @SerializedName("password") @Expose
     private String password;
 
-    public AuthenticationPacket(String userID, String password) {
-        this.userID = userID;
+    public AuthenticationPacket(String personnelId, String password) {
+        this.personnelId = personnelId;
         this.password = password;
     }
 
     public String getUserID() {
-        return userID;
+        return personnelId;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUserID(String personnelId) {
+        this.personnelId = personnelId;
     }
 
     public String getPassword() {

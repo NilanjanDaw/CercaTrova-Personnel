@@ -11,61 +11,63 @@ import java.io.Serializable;
  */
 
 
-public class EmergencyPersonnel implements Serializable{
+public class EmergencyPersonnel implements Serializable {
 
-    @SerializedName("adhaar_number") @Expose
+    @SerializedName("personnel_id")
+    @Expose
+    private String personnelId;
+    @SerializedName("adhaar_number")
+    @Expose
     private String adhaarNumber;
-    @SerializedName("first_name") @Expose
+    @SerializedName("first_name")
+    @Expose
     private String firstName;
-    @SerializedName("last_name") @Expose
+    @SerializedName("last_name")
+    @Expose
     private String lastName;
-    @SerializedName("email_id") @Expose
-    private String emailId;
-    @SerializedName("contact_number") @Expose
+    @SerializedName("contact_number")
+    @Expose
     private int contactNumber;
-    @SerializedName("address") @Expose
-    private String address;
-    @SerializedName("age") @Expose
-    private int age;
-    @SerializedName("gender") @Expose
-    private String gender;
-    @SerializedName("blood_group") @Expose
-    private String bloodGroup;
-    @SerializedName("password") @Expose
+    @SerializedName("car_number")
+    @Expose
+    private String carNumber;
+    @SerializedName("responder_type")
+    @Expose
+    private int responderType;
+    @SerializedName("base_station")
+    @Expose
+    private String baseStation;
+    @SerializedName("password")
+    @Expose
     private String password;
-    @SerializedName("location") @Expose
+    @SerializedName("location")
+    @Expose
     private Location location;
 
 
-    /**
-     *
-     * @param lastName
-     * @param contactNumber
-     * @param emailId
-     * @param bloodGroup
-     * @param location
-     * @param address
-     * @param age
-     * @param gender
-     * @param firstName
-     * @param password
-     * @param adhaarNumber
-     */
-    public EmergencyPersonnel(String adhaarNumber, String firstName, String lastName,
-                              String emailId, int contactNumber, String address, int age,
-                              String gender, String bloodGroup, String password, Location location) {
-        super();
+    public EmergencyPersonnel(String personnelId, String adhaarNumber, String firstName,
+                              String lastName, int contactNumber, String carNumber,
+                              int responderType, String baseStation, String password, Location location)
+    {
+        this.personnelId = personnelId;
         this.adhaarNumber = adhaarNumber;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.emailId = emailId;
         this.contactNumber = contactNumber;
-        this.address = address;
-        this.age = age;
-        this.gender = gender;
-        this.bloodGroup = bloodGroup;
+        this.carNumber = carNumber;
+        this.responderType = responderType;
+        this.baseStation = baseStation;
         this.password = password;
         this.location = location;
+    }
+
+
+    public String getPersonnelId() {
+        return personnelId;
+    }
+
+    public void setPersonnelId(String personnelId) {
+        this.personnelId = personnelId;
     }
 
     public String getAdhaarNumber() {
@@ -92,14 +94,6 @@ public class EmergencyPersonnel implements Serializable{
         this.lastName = lastName;
     }
 
-    public String getEmailId() {
-        return emailId;
-    }
-
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
-    }
-
     public int getContactNumber() {
         return contactNumber;
     }
@@ -108,36 +102,28 @@ public class EmergencyPersonnel implements Serializable{
         this.contactNumber = contactNumber;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCarNumber() {
+        return carNumber;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCarNumber(String carNumber) {
+        this.carNumber = carNumber;
     }
 
-    public int getAge() {
-        return age;
+    public int getResponderType() {
+        return responderType;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setResponderType(int responderType) {
+        this.responderType = responderType;
     }
 
-    public String getGender() {
-        return gender;
+    public String getBaseStation() {
+        return baseStation;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getBloodGroup() {
-        return bloodGroup;
-    }
-
-    public void setBloodGroup(String bloodGroup) {
-        this.bloodGroup = bloodGroup;
+    public void setBaseStation(String baseStation) {
+        this.baseStation = baseStation;
     }
 
     public String getPassword() {
@@ -155,5 +141,3 @@ public class EmergencyPersonnel implements Serializable{
     public void setLocation(Location location) {
         this.location = location;
     }
-
-}

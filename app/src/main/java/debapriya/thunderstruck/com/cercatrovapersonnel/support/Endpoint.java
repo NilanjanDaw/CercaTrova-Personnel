@@ -12,16 +12,14 @@ import retrofit2.http.POST;
 
 public interface Endpoint {
 
-    @GET("login_server/user/")
-    Call<User[]> getUserList();
+    @GET("personnel_login_server/user/")
+    Call<EmergencyPersonnel[]> getUserList();
 
-    @POST("login_server/user/")
-    Call<User> createUser(@Body User user);
+    @POST("personnel_login_server/user/")
+    Call<EmergencyPersonnel> createUser(@Body EmergencyPersonnel user);
 
-    @POST("login_server/account_authentication/")
-    Call<User> validateLogin(@Body AuthenticationPacket authenticationPacket);
+    @POST("personnwl_login_server/account_authentication/")
+    Call<EmergencyPersonnel> validateLogin(@Body AuthenticationPacket authenticationPacket);
 
-    @POST("emergency/notify/")
-    Call<Emergency> notifyEmergency(@Body Emergency emergency);
 
 }
