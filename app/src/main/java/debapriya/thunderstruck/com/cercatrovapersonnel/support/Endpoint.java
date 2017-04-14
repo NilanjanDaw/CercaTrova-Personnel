@@ -18,7 +18,7 @@ public interface Endpoint {
     @POST("personnel_login_server/user/")
     Call<EmergencyPersonnel> createUser(@Body EmergencyPersonnel user);
 
-    @POST("personnwl_login_server/account_authentication/")
+    @POST("personnel_login_server/account_authentication/")
     Call<EmergencyPersonnel> validateLogin(@Body AuthenticationPacket authenticationPacket);
 
 
