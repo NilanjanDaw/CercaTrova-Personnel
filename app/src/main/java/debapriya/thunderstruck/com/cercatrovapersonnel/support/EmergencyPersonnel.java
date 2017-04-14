@@ -27,7 +27,7 @@ public class EmergencyPersonnel implements Serializable {
     private String lastName;
     @SerializedName("contact_number")
     @Expose
-    private int contactNumber;
+    private String contactNumber;
     @SerializedName("car_number")
     @Expose
     private String carNumber;
@@ -46,8 +46,9 @@ public class EmergencyPersonnel implements Serializable {
 
 
     public EmergencyPersonnel(String personnelId, String adhaarNumber, String firstName,
-                              String lastName, int contactNumber, String carNumber,
+                              String lastName, String contactNumber, String carNumber,
                               int responderType, String baseStation, String password, Location location) {
+
         this.personnelId = personnelId;
         this.adhaarNumber = adhaarNumber;
         this.firstName = firstName;
@@ -59,7 +60,6 @@ public class EmergencyPersonnel implements Serializable {
         this.password = password;
         this.location = location;
     }
-
 
     public String getPersonnelId() {
         return personnelId;
@@ -93,11 +93,11 @@ public class EmergencyPersonnel implements Serializable {
         this.lastName = lastName;
     }
 
-    public int getContactNumber() {
+    public String getContactNumber() {
         return contactNumber;
     }
 
-    public void setContactNumber(int contactNumber) {
+    public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
     }
 
