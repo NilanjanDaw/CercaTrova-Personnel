@@ -3,6 +3,7 @@ package debapriya.thunderstruck.com.cercatrovapersonnel;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -13,12 +14,12 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,9 +29,20 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import debapriya.thunderstruck.com.cercatrovapersonnel.support.AuthenticationPacket;
+import debapriya.thunderstruck.com.cercatrovapersonnel.support.Constants;
+import debapriya.thunderstruck.com.cercatrovapersonnel.support.EmergencyPersonnel;
+import debapriya.thunderstruck.com.cercatrovapersonnel.support.Endpoint;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -39,28 +51,19 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+    public static final String TAG = "LoginActivity";
     /**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private Endpoint apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +95,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        apiService = retrofit.create(Endpoint.class);
     }
 
     private void populateAutoComplete() {
@@ -144,9 +153,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         mEmailView.setError(null);
@@ -185,8 +191,32 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            AuthenticationPacket packet = new AuthenticationPacket("P7942", "abc123");
+            Call<EmergencyPersonnel> call = apiService.validateLogin(packet);
+            call.enqueue(new Callback<EmergencyPersonnel>() {
+                @Override
+                public void onResponse(Call<EmergencyPersonnel> call, Response<EmergencyPersonnel> response) {
+                    EmergencyPersonnel emergencyPersonnel = response.body();
+                    if (emergencyPersonnel != null && emergencyPersonnel.getFirstName() != null) {
+                        Log.d(TAG, "onResponse: " + emergencyPersonnel.getFirstName());
+                        Intent intent =  new Intent(getBaseContext(), MainActivity.class);
+                        intent.putExtra("profile_data", emergencyPersonnel);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast.makeText(getBaseContext(), "Login Failed", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<EmergencyPersonnel> call, Throwable t) {
+                    Log.d(TAG, "onFailure: Failed");
+                    Log.d(TAG, "onFailure: " + t.getMessage());
+                    showProgress(false);
+                    Toast.makeText(LoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                }
+            });
+
         }
     }
 
@@ -282,61 +312,4 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         int ADDRESS = 0;
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
 }
-
