@@ -47,8 +47,7 @@ public class EmergencyPersonnel implements Serializable {
 
     public EmergencyPersonnel(String personnelId, String adhaarNumber, String firstName,
                               String lastName, int contactNumber, String carNumber,
-                              int responderType, String baseStation, String password, Location location)
-    {
+                              int responderType, String baseStation, String password, Location location) {
         this.personnelId = personnelId;
         this.adhaarNumber = adhaarNumber;
         this.firstName = firstName;
@@ -141,3 +140,4 @@ public class EmergencyPersonnel implements Serializable {
     public void setLocation(Location location) {
         this.location = location;
     }
+}
