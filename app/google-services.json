@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "485484431658",
+    "firebase_url": "https://cercatrova-1491771284872.firebaseio.com",
+    "project_id": "cercatrova-1491771284872",
+    "storage_bucket": "cercatrova-1491771284872.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485484431658:android:ded368d107157c6d",
+        "android_client_info": {
+          "package_name": "com.thunderstruck.nilanjan.cercatrova"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "485484431658-3bgm2o14dgfgbbbsuoeh4nr98jfb81oo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thunderstruck.nilanjan.cercatrova",
+            "certificate_hash": "f4c7c124c7445f4567d71152ea25c0cb3fbd5842"
+          }
+        },
+        {
+          "client_id": "485484431658-lsuqtk557ip93v8qmp4on9jif3j2p25b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr2gfIsya-3BoJ_ZWLaeBQ5LX1dqHexz0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "485484431658-lsuqtk557ip93v8qmp4on9jif3j2p25b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:485484431658:android:67e7547c27dc67a1",
+        "android_client_info": {
+          "package_name": "debapriya.thunderstruck.com.cercatrovapersonnel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "485484431658-2fmk1cu1hgmv4rtk67s4m5sf2t9tqs2o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "debapriya.thunderstruck.com.cercatrovapersonnel",
+            "certificate_hash": "f4c7c124c7445f4567d71152ea25c0cb3fbd5842"
+          }
+        },
+        {
+          "client_id": "485484431658-lsuqtk557ip93v8qmp4on9jif3j2p25b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr2gfIsya-3BoJ_ZWLaeBQ5LX1dqHexz0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "485484431658-lsuqtk557ip93v8qmp4on9jif3j2p25b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
