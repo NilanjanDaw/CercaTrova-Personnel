@@ -14,9 +14,13 @@
         completions."
     </string>
     <string name="yes">Yes</string>
-    <string name="is_your_unit_active">Is your unit active?</string>
+    <string name="unit_active_question">Do you want to Activate Unit?</string>
+    <string name="unit_inactive_question">Do you want to Inactivate Unit?</string>
     <string name="no">No</string>
     <string name="title_activity_maps">Map</string>
     <string name="new_account">No account yet? Create one</string>
     <string name="cerca_trova">Cerca Trova</string>
+    <string name="shared_preference_file">debapriya.thunderstruck.com.cercatrovapersonnel.data</string>
+    <string name="unit_status_inactive">Unit: Inactive</string>
+    <string name="unit_status_active">Unit: Active</string>
 </resources>

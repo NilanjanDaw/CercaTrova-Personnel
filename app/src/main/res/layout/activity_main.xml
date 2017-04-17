@@ -8,8 +8,8 @@
 
     <Button
         android:id="@+id/button_yes"
-        android:layout_width="123dp"
-        android:layout_height="66dp"
+        android:layout_width="323dp"
+        android:layout_height="68dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -17,45 +17,46 @@
         android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
         android:elevation="4dp"
         android:text="@string/yes"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.151"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.615" />
+        app:layout_constraintVertical_bias="0.606" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/unit_status_question"
         android:layout_width="275dp"
         android:layout_height="99dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:text="@string/is_your_unit_active"
+        android:text="@string/unit_active_question"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.253" />
+        app:layout_constraintVertical_bias="0.383" />
 
-    <Button
-        android:id="@+id/button_no"
-        android:layout_width="123dp"
-        android:layout_height="66dp"
+    <TextView
+        android:id="@+id/unit_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
-        android:elevation="4dp"
-        android:text="@string/no"
+        android:text="@string/unit_status_inactive"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.853"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.615" />
+        app:layout_constraintVertical_bias="0.11" />
+
 </android.support.constraint.ConstraintLayout>

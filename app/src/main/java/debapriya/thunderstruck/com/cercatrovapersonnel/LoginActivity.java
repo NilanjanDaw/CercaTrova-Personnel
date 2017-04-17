@@ -186,12 +186,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
+
             focusView.requestFocus();
         } else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
             showProgress(true);
             AuthenticationPacket packet = new AuthenticationPacket("P7942", "abc123");
             Call<EmergencyPersonnel> call = apiService.validateLogin(packet);
@@ -204,8 +201,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         Intent intent =  new Intent(getBaseContext(), MainActivity.class);
                         intent.putExtra("profile_data", emergencyPersonnel);
                         startActivity(intent);
+                        showProgress(false);
                         finish();
                     } else {
+                        showProgress(false);
                         Toast.makeText(getBaseContext(), "Login Failed", Toast.LENGTH_LONG).show();
                     }
                 }
