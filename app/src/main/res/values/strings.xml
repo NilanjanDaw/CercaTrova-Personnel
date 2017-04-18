@@ -21,6 +21,21 @@
     <string name="new_account">No account yet? Create one</string>
     <string name="cerca_trova">Cerca Trova</string>
     <string name="shared_preference_file">debapriya.thunderstruck.com.cercatrovapersonnel.data</string>
+    <string name="broadcast_intent_filter">debapriya.thunderstruck.com.cercatrovapersonnel.emergency_broadcast</string>
     <string name="unit_status_inactive">Unit: Inactive</string>
     <string name="unit_status_active">Unit: Active</string>
+    <string name="sos">SOS</string>
+    <string name="start_navigation">start navigation</string>
+    <string name="address">Address:</string>
+    <string name="adhaar_number">Adhaar Number:</string>
+    <string name="age">Age:</string>
+    <string name="blood_group">Blood Group:</string>
+    <string name="contact">Contact</string>
+    <string name="current_location">Current Location:</string>
+    <string name="gender">Gender:</string>
+    <string name="name">Name:</string>
+    <string name="service_not_available">Service Not Available</string>
+    <string name="invalid_lat_long_used">Invalid Location coordinates</string>
+    <string name="no_address_found">No address found</string>
+    <string name="address_found">Address Found</string>
 </resources>

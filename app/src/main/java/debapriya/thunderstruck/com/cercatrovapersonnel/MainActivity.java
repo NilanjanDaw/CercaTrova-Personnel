@@ -4,17 +4,21 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -58,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private ProgressDialog progressDialog;
     private int unitStatus = 0;
     private Endpoint apiService;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     protected void onResume() {
         super.onResume();
         getLocation();
+        getBaseContext().registerReceiver(broadcastReceiver, new IntentFilter(getString(R.string.broadcast_intent_filter)));
     }
 
     @Override
@@ -87,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if (googleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
         }
+        getBaseContext().unregisterReceiver(broadcastReceiver);
     }
-
     @OnClick({R.id.button_yes})
     void notify(View view) {
         if (view.getId() == R.id.button_yes) {
@@ -184,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
+
     private class ProfileUpdateNotificationTask extends AsyncTask<Void, Void, EmergencyPersonnel> {
 
         @Override
@@ -259,5 +266,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         }
     }
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "onReceive: Broadcast" + intent.getSerializableExtra("user_profile_data").toString());
+            user = (User) intent.getSerializableExtra("user_profile_data");
+            Intent intentDetails  = new Intent(context, SOSDetailsActivity.class);
+            intentDetails.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intentDetails.putExtra("user_data", user);
+            startActivity(intentDetails);
+        }
+    };
 
 }

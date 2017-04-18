@@ -40,6 +40,9 @@ public class User implements Serializable{
     private Location location;
 
 
+    public User() {
+        super();
+    }
     /**
      *
      * @param lastName
