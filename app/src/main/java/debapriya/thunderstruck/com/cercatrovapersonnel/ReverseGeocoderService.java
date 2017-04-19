@@ -18,7 +18,6 @@ import java.util.Locale;
 
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.Constants;
 
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by nilanjan on 18-Apr-17.
@@ -28,6 +27,7 @@ import static android.content.ContentValues.TAG;
 public class ReverseGeocoderService extends IntentService {
 
     protected ResultReceiver mReceiver;
+    public static final String TAG = "ReverseGeocoderService";
 
     public ReverseGeocoderService(String name) {
         super(name);
@@ -39,6 +39,7 @@ public class ReverseGeocoderService extends IntentService {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         Location location = intent.getParcelableExtra(
                 Constants.LOCATION_DATA_EXTRA);
+        mReceiver = intent.getParcelableExtra(Constants.RECEIVER);
         List<Address> addresses = null;
         String errorMessage = "";
 

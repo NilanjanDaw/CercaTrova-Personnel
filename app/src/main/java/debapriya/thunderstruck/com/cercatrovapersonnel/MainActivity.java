@@ -275,6 +275,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             Intent intentDetails  = new Intent(context, SOSDetailsActivity.class);
             intentDetails.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intentDetails.putExtra("user_data", user);
+            intentDetails.putExtra("profile_data", emergencyPersonnel);
             startActivity(intentDetails);
         }
     };

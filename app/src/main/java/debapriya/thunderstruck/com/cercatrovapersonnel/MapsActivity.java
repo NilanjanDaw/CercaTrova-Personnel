@@ -14,7 +14,13 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.directions.route.AbstractRouting;
+import com.directions.route.Route;
+import com.directions.route.RouteException;
+import com.directions.route.Routing;
+import com.directions.route.RoutingListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -26,21 +32,28 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import debapriya.thunderstruck.com.cercatrovapersonnel.support.EmergencyPersonnel;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.User;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener, RoutingListener {
 
     private GoogleMap mMap;
     public static final int REQUEST_ACCESS_LOCATION = 0;
     public static final String TAG = "MapsActivity";
     private User user;
+    private EmergencyPersonnel emergencyPersonnel;
+    private List<Polyline> polylines;
     private GoogleApiClient mGoogleApiClient;
+    private LatLng start, end;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +63,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         user = (User) getIntent().getSerializableExtra("user_profile_data");
+        emergencyPersonnel = (EmergencyPersonnel) getIntent().getSerializableExtra("profile_data");
+
+        start = new LatLng(emergencyPersonnel.getLocation().getCoordinates().get(0),
+                emergencyPersonnel.getLocation().getCoordinates().get(1));
+        end = new LatLng(user.getLocation().getCoordinates().get(0), user.getLocation().getCoordinates().get(1));
+        Routing routing = new Routing.Builder()
+                .travelMode(AbstractRouting.TravelMode.DRIVING)
+                .withListener(this)
+                .waypoints(start, end)
+                .build();
+        routing.execute();
     }
 
     @Override
@@ -75,7 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Add a marker in Sydney and move the camera
         LatLng userLocation = new LatLng(user.getLocation().getCoordinates().get(0),
                 user.getLocation().getCoordinates().get(1));
-        mMap.addMarker(new MarkerOptions().position(userLocation).title("Marker in Sydney"));
+        mMap.addMarker(new MarkerOptions().position(userLocation).title(user.getFirstName() + " " + user.getLastName()));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f));
         getLocationUpdate();
 
@@ -143,7 +167,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         coordinates.add(location.getLatitude());
         coordinates.add(location.getLongitude());
         userLocation = new debapriya.thunderstruck.com.cercatrovapersonnel.support.Location("POINT", coordinates);
-        user.setLocation(userLocation);
+        emergencyPersonnel.setLocation(userLocation);
         Log.d(TAG, "onLocationChanged: " + location.getLatitude() + " " + location.getLongitude());
     }
 
@@ -166,6 +190,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onRoutingFailure(RouteException e) {
+        if(e != null) {
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(this, "Something went wrong, Try again", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onRoutingStart() {
+
+    }
+
+    @Override
+    public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start, 16f));
+
+
+        if(polylines != null && polylines.size()>0) {
+            for (Polyline poly : polylines) {
+                poly.remove();
+            }
+        }
+
+        polylines = new ArrayList<>();
+        PolylineOptions polyOptions = new PolylineOptions();
+        polyOptions.color(getResources().getColor(R.color.colorPrimary));
+        polyOptions.width(10);
+        polyOptions.addAll(route.get(0).getPoints());
+        Polyline polyline = mMap.addPolyline(polyOptions);
+        polylines.add(polyline);
+    }
+
+    @Override
+    public void onRoutingCancelled() {
 
     }
 }

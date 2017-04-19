@@ -22,6 +22,7 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.Constants;
+import debapriya.thunderstruck.com.cercatrovapersonnel.support.EmergencyPersonnel;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.User;
 
 public class SOSDetailsActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
@@ -40,6 +41,7 @@ public class SOSDetailsActivity extends AppCompatActivity implements GoogleApiCl
     protected Location mLastLocation;
     private AddressResultReceiver mResultReceiver;
     private User user;
+    private EmergencyPersonnel emergencyPersonnel;
     public static final String TAG = "SOSDetailsActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,10 @@ public class SOSDetailsActivity extends AppCompatActivity implements GoogleApiCl
         setContentView(R.layout.activity_sosdetails);
         ButterKnife.bind(this);
         user = (User) getIntent().getSerializableExtra("user_data");
+        emergencyPersonnel = (EmergencyPersonnel) getIntent().getSerializableExtra("profile_data");
+        mResultReceiver = new AddressResultReceiver(new Handler());
         setupUI(user);
+
     }
 
     public void setupUI(final User user) {
@@ -73,6 +78,7 @@ public class SOSDetailsActivity extends AppCompatActivity implements GoogleApiCl
             public void onClick(View view) {
                 Intent intent = new Intent(getBaseContext(), MapsActivity.class);
                 intent.putExtra("user_profile_data", user);
+                intent.putExtra("profile_data", emergencyPersonnel);
                 startActivity(intent);
             }
         });
