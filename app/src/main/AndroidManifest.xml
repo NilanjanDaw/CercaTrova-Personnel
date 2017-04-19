@@ -62,7 +62,7 @@
         </service>
         <service
             android:name=".ReverseGeocoderService"
-            android:exported="false"/>
+            android:exported="false" />
 
         <activity android:name=".SOSDetailsActivity" />
     </application>
