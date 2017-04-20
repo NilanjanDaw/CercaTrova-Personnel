@@ -2,7 +2,6 @@ package debapriya.thunderstruck.com.cercatrovapersonnel.support;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 /**
@@ -20,6 +19,9 @@ public interface Endpoint {
 
     @POST("personnel_login_server/account_authentication/")
     Call<EmergencyPersonnel> validateLogin(@Body AuthenticationPacket authenticationPacket);
+
+    @POST("emergency/accept/")
+    Call<Void> acceptLogin(@Body EmergencyAccept user);
 
 
 }

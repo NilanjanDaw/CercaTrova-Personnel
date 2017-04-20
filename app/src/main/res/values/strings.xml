@@ -13,6 +13,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="permission_rationale_location">"Location permissions are needed for providing GPS triangulations."
+    </string>
     <string name="yes">Yes</string>
     <string name="unit_active_question">Do you want to Activate Unit?</string>
     <string name="unit_inactive_question">Do you want to Inactivate Unit?</string>
@@ -38,4 +40,6 @@
     <string name="invalid_lat_long_used">Invalid Location coordinates</string>
     <string name="no_address_found">No address found</string>
     <string name="address_found">Address Found</string>
+    <string name="incoming_emergency">Incoming Emergency</string>
+    <string name="investigate">Investigate</string>
 </resources>

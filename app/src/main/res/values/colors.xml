@@ -6,4 +6,6 @@
     <color name="colorLoginAccent">#ffffff</color>
     <color name="colorLoginPrimary">#445bd9</color>
     <color name="colorInactive">#a8ff2824</color>
+    <color name="colorAlertPrimary">#ff0000</color>
+    <color name="colorAlertPrimaryDark">#c20000</color>
 </resources>

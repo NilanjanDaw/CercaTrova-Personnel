@@ -21,8 +21,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -51,24 +53,37 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
+    public static final int REQUEST_ACCESS_LOCATION = 0;
+    public static final String TAG = "MainActivity";
     @BindView(R.id.button_yes) Button yes;
     @BindView(R.id.unit_status) TextView statusText;
     @BindView(R.id.unit_status_question) TextView statusQuestion;
     private GoogleApiClient googleApiClient;
-    public static final int REQUEST_ACCESS_LOCATION = 0;
-    public static final String TAG = "MainActivity";
     private EmergencyPersonnel emergencyPersonnel;
     private Location location;
     private ProgressDialog progressDialog;
     private int unitStatus = 0;
     private Endpoint apiService;
     private User user;
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "onReceive: Broadcast" + intent.getSerializableExtra("user_profile_data").toString());
+            user = (User) intent.getSerializableExtra("user_profile_data");
+            Intent intentDetails  = new Intent(context, AlertActivity.class);
+            intentDetails.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intentDetails.putExtra("user_data", user);
+            intentDetails.putExtra("profile_data", emergencyPersonnel);
+            startActivity(intentDetails);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         emergencyPersonnel = (EmergencyPersonnel) getIntent().getSerializableExtra("profile_data");
         progressDialog = new ProgressDialog(MainActivity.this,
                 R.style.AppTheme_Dark_Dialog);
@@ -83,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onResume() {
         super.onResume();
+        statusText.setText(getString(R.string.unit_status_inactive));
+        statusQuestion.setText(getString(R.string.unit_active_question));
         getLocation();
         getBaseContext().registerReceiver(broadcastReceiver, new IntentFilter(getString(R.string.broadcast_intent_filter)));
     }
@@ -95,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
         getBaseContext().unregisterReceiver(broadcastReceiver);
     }
+
     @OnClick({R.id.button_yes})
     void notify(View view) {
         if (view.getId() == R.id.button_yes) {
@@ -163,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
         if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
             Snackbar.make(((Activity) getBaseContext()).findViewById(android.R.id.content),
-                    R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+                    R.string.permission_rationale_location, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
@@ -186,10 +204,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if (requestCode == REQUEST_ACCESS_LOCATION) {
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getLocation();
+            } else {
+                Toast.makeText(this, getString(R.string.permission_rationale_location), Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
     }
-
 
     private class ProfileUpdateNotificationTask extends AsyncTask<Void, Void, EmergencyPersonnel> {
 
@@ -266,18 +286,5 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             }
         }
     }
-
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "onReceive: Broadcast" + intent.getSerializableExtra("user_profile_data").toString());
-            user = (User) intent.getSerializableExtra("user_profile_data");
-            Intent intentDetails  = new Intent(context, SOSDetailsActivity.class);
-            intentDetails.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intentDetails.putExtra("user_data", user);
-            intentDetails.putExtra("profile_data", emergencyPersonnel);
-            startActivity(intentDetails);
-        }
-    };
 
 }

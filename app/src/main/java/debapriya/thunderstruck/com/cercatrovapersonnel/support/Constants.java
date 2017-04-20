@@ -7,7 +7,7 @@ package debapriya.thunderstruck.com.cercatrovapersonnel.support;
 
 public class Constants {
 
-    public static final String BASE_URL = "http://192.168.0.101:8000/";
+    public static final String BASE_URL = "http://192.168.0.100:8000/";
     public static final int SUCCESS_RESULT = 0;
     public static final int FAILURE_RESULT = 1;
     public static final String PACKAGE_NAME =

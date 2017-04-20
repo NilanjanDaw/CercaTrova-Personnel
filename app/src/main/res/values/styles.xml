@@ -37,4 +37,13 @@
         <item name="android:windowIsFloating">false</item>
     </style>
 
+    <style name="AppTheme.AlertActivity">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="colorControlHighlight">@color/colorLoginAccent</item>
+        <item name="colorAccent">@color/colorLoginAccent</item>
+    </style>
+
 </resources>

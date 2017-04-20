@@ -1,7 +1,5 @@
 package debapriya.thunderstruck.com.cercatrovapersonnel;
 
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
@@ -13,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -31,6 +28,8 @@ import debapriya.thunderstruck.com.cercatrovapersonnel.support.User;
 public class  SOSDetailsActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+    public static final String TAG = "SOSDetailsActivity";
+    protected Location mLastLocation;
     @BindView(R.id.name) TextView name;
     @BindView(R.id.age) TextView age;
     @BindView(R.id.gender) TextView gender;
@@ -40,13 +39,10 @@ public class  SOSDetailsActivity extends AppCompatActivity implements GoogleApiC
     @BindView(R.id.blood_group) TextView bloodGroup;
     @BindView(R.id.contact) Button contact;
     @BindView(R.id.navigate) Button navigate;
-
-    protected Location mLastLocation;
     private AddressResultReceiver mResultReceiver;
     private User user;
     private EmergencyPersonnel emergencyPersonnel;
-    private Dialog alertDialog;
-    public static final String TAG = "SOSDetailsActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,18 +52,6 @@ public class  SOSDetailsActivity extends AppCompatActivity implements GoogleApiC
         emergencyPersonnel = (EmergencyPersonnel) getIntent().getSerializableExtra("profile_data");
         mResultReceiver = new AddressResultReceiver(new Handler());
         setupUI(user);
-        alertDialog = new Dialog(getBaseContext(),android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-        WindowManager manager = (WindowManager) getSystemService(Activity.WINDOW_SERVICE);
-        int width, height;
-        WindowManager.LayoutParams params;
-        width = manager.getDefaultDisplay().getWidth();
-        height = manager.getDefaultDisplay().getHeight();
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(alertDialog.getWindow().getAttributes());
-        lp.width = width;
-        lp.height = height;
-        alertDialog.getWindow().setAttributes(lp);
-
     }
 
     public void setupUI(final User user) {

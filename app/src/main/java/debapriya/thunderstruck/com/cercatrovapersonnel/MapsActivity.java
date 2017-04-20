@@ -49,15 +49,16 @@ import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener, RoutingListener {
 
-    private GoogleMap mMap;
     public static final int REQUEST_ACCESS_LOCATION = 0;
     public static final String TAG = "MapsActivity";
+    FloatingActionButton navigate;
+    private GoogleMap mMap;
     private User user;
     private EmergencyPersonnel emergencyPersonnel;
     private List<Polyline> polylines;
     private GoogleApiClient mGoogleApiClient;
     private LatLng start, end;
-    FloatingActionButton navigate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,7 +147,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
             Snackbar.make(((Activity) getBaseContext()).findViewById(android.R.id.content),
-                    R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+                    R.string.permission_rationale_location, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok, new View.OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
