@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +19,6 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import debapriya.thunderstruck.com.cercatrovapersonnel.support.Constants;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.EmergencyPersonnel;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.User;
 
@@ -35,11 +32,9 @@ public class  SOSDetailsActivity extends AppCompatActivity implements GoogleApiC
     @BindView(R.id.gender) TextView gender;
     @BindView(R.id.adhaar_number) TextView adhaarNumber;
     @BindView(R.id.address) TextView address;
-    @BindView(R.id.current_location) TextView currentLocation;
     @BindView(R.id.blood_group) TextView bloodGroup;
     @BindView(R.id.contact) Button contact;
     @BindView(R.id.navigate) Button navigate;
-    private AddressResultReceiver mResultReceiver;
     private User user;
     private EmergencyPersonnel emergencyPersonnel;
 
@@ -50,7 +45,6 @@ public class  SOSDetailsActivity extends AppCompatActivity implements GoogleApiC
         ButterKnife.bind(this);
         user = (User) getIntent().getSerializableExtra("user_data");
         emergencyPersonnel = (EmergencyPersonnel) getIntent().getSerializableExtra("profile_data");
-        mResultReceiver = new AddressResultReceiver(new Handler());
         setupUI(user);
     }
 
@@ -81,18 +75,8 @@ public class  SOSDetailsActivity extends AppCompatActivity implements GoogleApiC
                 startActivity(intent);
             }
         });
-        //startReverseGeocoder();
     }
 
-    protected void startReverseGeocoder() {
-        mLastLocation = new Location("");
-        mLastLocation.setLatitude(user.getLocation().getCoordinates().get(0));
-        mLastLocation.setLongitude(user.getLocation().getCoordinates().get(1));
-        Intent intent = new Intent(this, ReverseGeocoderService.class);
-        intent.putExtra(Constants.RECEIVER, mResultReceiver);
-        intent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
-        startService(intent);
-    }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -109,19 +93,4 @@ public class  SOSDetailsActivity extends AppCompatActivity implements GoogleApiC
 
     }
 
-    private class AddressResultReceiver extends ResultReceiver {
-        public AddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-
-            String mAddressOutput = resultData.getString(Constants.RESULT_DATA_KEY);
-            if (resultCode == Constants.SUCCESS_RESULT) {
-                currentLocation.setText(mAddressOutput);
-            }
-
-        }
-    }
 }

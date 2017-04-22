@@ -60,9 +60,6 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".ReverseGeocoderService"
-            android:exported="false" />
 
         <activity android:name=".SOSDetailsActivity" />
         <activity android:name=".AlertActivity"
