@@ -21,7 +21,7 @@ public interface Endpoint {
     Call<EmergencyPersonnel> validateLogin(@Body AuthenticationPacket authenticationPacket);
 
     @POST("emergency/accept/")
-    Call<Void> acceptLogin(@Body EmergencyAccept user);
+    Call<Void> acceptLogin(@Body EmergencyAcceptPacket user);
 
 
 }

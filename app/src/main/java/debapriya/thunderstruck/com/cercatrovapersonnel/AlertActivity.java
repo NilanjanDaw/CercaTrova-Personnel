@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.Constants;
-import debapriya.thunderstruck.com.cercatrovapersonnel.support.EmergencyAccept;
+import debapriya.thunderstruck.com.cercatrovapersonnel.support.EmergencyAcceptPacket;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.EmergencyPersonnel;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.Endpoint;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.User;
@@ -47,7 +47,7 @@ public class AlertActivity extends AppCompatActivity {
                 intent.putExtra("user_data", user);
                 intent.putExtra("profile_data", personnel);
                 startActivity(intent);
-                EmergencyAccept acceptPacket = new EmergencyAccept(user.getAdhaarNumber(), personnel.getPersonnelId());
+                EmergencyAcceptPacket acceptPacket = new EmergencyAcceptPacket(user.getAdhaarNumber(), personnel.getPersonnelId());
                 notifyAcceptance(acceptPacket);
                 finish();
             }
@@ -55,7 +55,7 @@ public class AlertActivity extends AppCompatActivity {
 
     }
 
-    private void notifyAcceptance(EmergencyAccept accept) {
+    private void notifyAcceptance(EmergencyAcceptPacket accept) {
 
         Call<Void> acceptEmergency = apiService.acceptLogin(accept);
         acceptEmergency.enqueue(new Callback<Void>() {

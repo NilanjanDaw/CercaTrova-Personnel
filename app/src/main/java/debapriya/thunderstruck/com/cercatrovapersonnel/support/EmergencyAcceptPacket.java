@@ -8,14 +8,14 @@ import com.google.gson.annotations.SerializedName;
  * Project client_personnel
  */
 
-public class EmergencyAccept {
+public class EmergencyAcceptPacket {
 
     @SerializedName("user_adhaar_number") @Expose
     private String adhaarNumber;
     @SerializedName("personnel_id") @Expose
     private String personnelID;
 
-    public EmergencyAccept(String adhaarNumber, String personnelID) {
+    public EmergencyAcceptPacket(String adhaarNumber, String personnelID) {
         this.adhaarNumber = adhaarNumber;
         this.personnelID = personnelID;
     }
