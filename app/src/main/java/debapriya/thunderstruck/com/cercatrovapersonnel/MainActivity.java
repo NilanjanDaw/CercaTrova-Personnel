@@ -74,12 +74,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private ProgressDialog progressDialog;
     private int unitStatus = 0;
     private Endpoint apiService;
-    private User user;
+    private int counter = 0;
+
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "onReceive: Broadcast" + intent.getSerializableExtra("user_profile_data").toString());
-            user = (User) intent.getSerializableExtra("user_profile_data");
+            User user = (User) intent.getSerializableExtra("user_profile_data");
             Intent intentDetails = new Intent(context, AlertActivity.class);
             intentDetails.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intentDetails.putExtra("user_data", user);
@@ -87,6 +88,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             startActivity(intentDetails);
         }
     };
+
+    public BroadcastReceiver getBroadcastReceiver() {
+        return broadcastReceiver;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,8 +222,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onLocationChanged(Location location) {
         this.location = location;
+        counter++;
+        if (counter == 4 && unitStatus == 1) {
+            updateLocationOnServer(location);
+            counter = 0;
+        }
         Log.d(TAG, "onLocationChanged: " + location.getLatitude() + " " + location.getLongitude());
     }
+
 
 
     @Override
@@ -229,6 +240,26 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+    private void updateLocationOnServer(Location location) {
+
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.shared_preference_file), MODE_PRIVATE);
+        String locationString = "POINT(" + location.getLatitude() + " " + location.getLongitude() + ")";
+        String deviceID = sharedPreferences.getString("device_id", "");
+        UpdatePacket packet = new UpdatePacket(emergencyPersonnel.getPersonnelId(), locationString, deviceID, unitStatus);
+        Call<EmergencyPersonnel> updateProfile = apiService.updateProfile(packet);
+        updateProfile.enqueue(new Callback<EmergencyPersonnel>() {
+            @Override
+            public void onResponse(Call<EmergencyPersonnel> call, Response<EmergencyPersonnel> response) {
+                Log.d(TAG, "onResponse: " + response.body().getLocation().getCoordinates().get(0));
+            }
+
+            @Override
+            public void onFailure(Call<EmergencyPersonnel> call, Throwable t) {
+                //TODO update logic to handle server failure
+            }
+        });
     }
 
     @Override
