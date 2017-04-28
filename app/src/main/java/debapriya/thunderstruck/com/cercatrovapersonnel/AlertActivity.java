@@ -22,7 +22,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AlertActivity extends AppCompatActivity {
 
     Button investigate;
-    Endpoint apiService;
+    private Endpoint apiService;
+    private MediaPlayer mediaPlayer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +31,7 @@ public class AlertActivity extends AppCompatActivity {
         final User user = (User) getIntent().getSerializableExtra("user_data");
         final EmergencyPersonnel personnel = (EmergencyPersonnel) getIntent().getSerializableExtra("profile_data");
         final MediaPlayer mediaPlayer = MediaPlayer.create(this, R.raw.oxygen);
+        this.mediaPlayer = mediaPlayer;
         mediaPlayer.setLooping(true);
         mediaPlayer.start();
         Retrofit retrofit = new Retrofit.Builder()
@@ -42,7 +44,6 @@ public class AlertActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mediaPlayer.stop();
-                mediaPlayer.release();
                 Intent intent = new Intent(getBaseContext(), SOSDetailsActivity.class);
                 intent.putExtra("user_data", user);
                 intent.putExtra("profile_data", personnel);
@@ -52,6 +53,16 @@ public class AlertActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
 
     }
 

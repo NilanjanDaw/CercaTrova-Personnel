@@ -19,7 +19,7 @@ import debapriya.thunderstruck.com.cercatrovapersonnel.support.User;
  * Project client_personnel
  */
 
-public class EmergencyAlertReceiver extends FirebaseMessagingService {
+public class EmergencyBroadcastListener extends FirebaseMessagingService {
 
     public static final String TAG = "EmergencyBroadcast";
 
