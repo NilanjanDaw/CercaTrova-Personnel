@@ -15,7 +15,7 @@ import debapriya.thunderstruck.com.cercatrovapersonnel.support.Location;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.User;
 
 /**
- * Created by nilanjan on 16-Apr-17.
+ * Created by nilanjan and debapriya on 16-Apr-17.
  * Project client_personnel
  */
 
@@ -23,6 +23,12 @@ public class EmergencyBroadcastListener extends FirebaseMessagingService {
 
     public static final String TAG = "EmergencyBroadcast";
 
+    /**
+     * Called when message is received.
+     *
+     * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
+     */
+    // [START receive_message]
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "From: " + remoteMessage.getFrom());
@@ -37,14 +43,24 @@ public class EmergencyBroadcastListener extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
-
+        /*
+         Retrieving Data map and digesting it for further use by  foreground processes
+         */
         Map<String, String> data = remoteMessage.getData();
         User user = digestData(data);
         handleNotification(user);
     }
 
+    /**
+     * Method to digest the data received as part of the Firebase message payload
+     * @param data String Map containing message payload
+     * @return Deserialized User object instantiated according to the Message payload
+     */
     private User digestData(Map<String, String> data) {
         User user = new User();
+        /*
+        Extracting and updating User object according to payload data
+         */
         user.setAdhaarNumber(data.get("adhaar_number"));
         user.setFirstName(data.get("first_name"));
         user.setLastName(data.get("last_name"));
@@ -61,8 +77,12 @@ public class EmergencyBroadcastListener extends FirebaseMessagingService {
         return user;
     }
 
+    /**
+     * Broadcast notifier to notify foreground activity of Incoming Emergency
+     * @param user Object containing details of the Emergency User
+     */
     private void handleNotification(User user) {
-
+        //sending broadcast to activity with registered broadcast filter
         Intent intent = new Intent(getString(R.string.broadcast_intent_filter));
         intent.putExtra("user_profile_data", user);
         getBaseContext().sendBroadcast(intent);

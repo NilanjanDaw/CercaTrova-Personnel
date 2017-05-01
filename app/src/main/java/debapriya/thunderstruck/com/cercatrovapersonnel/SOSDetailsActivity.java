@@ -22,11 +22,18 @@ import butterknife.ButterKnife;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.EmergencyPersonnel;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.User;
 
+/**
+ * UI activity to render details of the Emergency User
+ * @author nilanjan and Debapriya
+ */
 public class  SOSDetailsActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = "SOSDetailsActivity";
     protected Location mLastLocation;
+    /*
+    Binding UI elements using ButterKnife
+     */
     @BindView(R.id.name) TextView name;
     @BindView(R.id.age) TextView age;
     @BindView(R.id.gender) TextView gender;
@@ -38,6 +45,11 @@ public class  SOSDetailsActivity extends AppCompatActivity implements GoogleApiC
     private User user;
     private EmergencyPersonnel emergencyPersonnel;
 
+    /**
+     Perform initialization of all fragments and loaders.
+     * Instantiate and play alert tone, and render Alert UI
+     * @param savedInstanceState is a Bundle object containing the activity's previously saved state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +60,10 @@ public class  SOSDetailsActivity extends AppCompatActivity implements GoogleApiC
         setupUI(user);
     }
 
+    /**
+     * Setting up UI according to received message payload
+     * @param user Object containing the Emergency User details
+     */
     public void setupUI(final User user) {
         name.setText(user.getFirstName() + " " + user.getLastName());
         Log.d(TAG, "setupUI: " + user.getAge() + user.getAddress());
@@ -57,6 +73,10 @@ public class  SOSDetailsActivity extends AppCompatActivity implements GoogleApiC
         adhaarNumber.setText(user.getAdhaarNumber());
         address.setText(user.getAddress());
         bloodGroup.setText(user.getBloodGroup());
+        /*
+        Setting a Click listener on the contact button to fire
+        the Dialer Intent with the Emergency User's contact information
+         */
         contact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,6 +86,10 @@ public class  SOSDetailsActivity extends AppCompatActivity implements GoogleApiC
             }
         });
 
+        /*
+        Setting a Click listener on the navigate button to start the Maps Activity,
+        with the User's location, showing the shortest route to reach the user
+         */
         navigate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
