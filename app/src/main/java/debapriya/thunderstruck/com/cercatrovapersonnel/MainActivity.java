@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onPause() {
         super.onPause();
-        if (googleApiClient != null) {
+        if (googleApiClient != null && googleApiClient.isConnected()) {
             LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
         }
         getBaseContext().unregisterReceiver(broadcastReceiver);
