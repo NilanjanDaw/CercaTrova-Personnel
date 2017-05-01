@@ -46,6 +46,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
+ * @author Nilanjan and Debapriya
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
@@ -61,20 +62,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private Endpoint apiService;
 
+    /**
+     * Perform initialization of all fragments and loaders.
+     * @param savedInstanceState is a Bundle object containing the activity's previously saved state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        //Email id has been made an editable text view that shows completion suggestions automatically while the user is typing.
         populateAutoComplete();
-
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptLogin(); //attemptLogin() method is invoked
                     return true;
                 }
                 return false;
@@ -89,16 +94,28 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+         /*
+          Retrofit is a type-safe REST client for Android, used for interacting with the APIs and sending network requests
+         */
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         apiService = retrofit.create(Endpoint.class);
 
+        /*
+          A dialog showing a progress indicator with the text 'Authenticating' will be displayed
+          after the sign in button has been pressed
+         */
         progressDialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Authenticating...");
+        /*
+         shared preferences allows to save and retrieve data in the form of key, value pair
+          the first parameter is the key, second parameter is the mode
+          the user id and the password will be saved in the shared preferences once the sign in button is pressed
+         */
         sharedPreferences = this.getSharedPreferences(getString(R.string.shared_preference_file), MODE_PRIVATE);
         if (sharedPreferences.contains("user_id") && sharedPreferences.contains("password")) {
             mEmailView.setText(sharedPreferences.getString("user_id", ""));
@@ -116,6 +133,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         getLoaderManager().initLoader(0, null, this);
     }
 
+    /**
+     * handling dynamic permission for acquiring contact details
+     * @return status
+     */
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;
@@ -193,9 +214,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             editor.putString("user_id", email);
             editor.putString("password", password);
             editor.apply();
+            /*
+            Invoking the API to perform the login
+             */
             AuthenticationPacket packet = new AuthenticationPacket(email, password);
             Call<EmergencyPersonnel> call = apiService.validateLogin(packet);
             call.enqueue(new Callback<EmergencyPersonnel>() {
+                /**
+                 * onResponse method is invoked for a received HTTP response.
+                 * If the personnel's information provided is not null, the progress dialog disappears
+                 * and it takes to the next GUI screen
+                 * Otherwise, a message is displayed that the personnel failed to login
+                 * @param call creates a new, identical call to this one which can be enqueued
+                 *             or executed even if this call has already been.
+                 * @param response synchronously sends the request and returns its response.
+                 */
                 @Override
                 public void onResponse(Call<EmergencyPersonnel> call, Response<EmergencyPersonnel> response) {
                     EmergencyPersonnel emergencyPersonnel = response.body();
