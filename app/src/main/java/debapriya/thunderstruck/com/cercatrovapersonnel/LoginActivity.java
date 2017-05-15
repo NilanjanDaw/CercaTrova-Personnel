@@ -35,6 +35,7 @@ import java.util.List;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.AuthenticationPacket;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.Constants;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.EmergencyPersonnel;
+import debapriya.thunderstruck.com.cercatrovapersonnel.support.Encryption;
 import debapriya.thunderstruck.com.cercatrovapersonnel.support.Endpoint;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -217,7 +218,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             /*
             Invoking the API to perform the login
              */
-            AuthenticationPacket packet = new AuthenticationPacket(email, password);
+            AuthenticationPacket packet = null;
+            try {
+                Encryption encryption = new Encryption();
+                packet = new AuthenticationPacket(email, encryption.encryptPassword(password));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             Call<EmergencyPersonnel> call = apiService.validateLogin(packet);
             call.enqueue(new Callback<EmergencyPersonnel>() {
                 /**
