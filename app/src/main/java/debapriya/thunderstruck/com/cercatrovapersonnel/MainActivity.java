@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     public static final int REQUEST_ACCESS_LOCATION = 0;
     public static final String TAG = "MainActivity";
+    public static final int UNIT_ACTIVE = 1;
+    public static final int UNIT_INACTIVE = 0;
     private static final int REQUEST_CHECK_SETTINGS = 10;
     @BindView(R.id.button_yes)
     Button yes;
@@ -164,13 +166,21 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             googleApiClient.disconnect();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (unitStatus == UNIT_INACTIVE)
+            super.onBackPressed();
+        else
+            Toast.makeText(this, "Please Inactivate Unit before exiting", Toast.LENGTH_LONG).show();
+    }
+
     /**
      *If the personnel chooses to be active, then its status changes to 1, otherwise it remains as being 0
      */
     @OnClick({R.id.button_yes})
     void notify(View view) {
         if (view.getId() == R.id.button_yes) {
-            unitStatus = (unitStatus == 1) ? 0 : 1;
+            unitStatus = (unitStatus == 1) ? UNIT_INACTIVE : UNIT_ACTIVE;
             new ProfileUpdateNotificationTask().execute();
         }
     }
@@ -275,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onLocationChanged(Location location) {
         this.location = location;
         counter++;
-        if (counter == 4 && unitStatus == 1) {
+        if (counter == 1 && unitStatus == UNIT_ACTIVE) {
             updateLocationOnServer(location);
             counter = 0;
         }
@@ -326,7 +336,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
              */
             @Override
             public void onFailure(Call<EmergencyPersonnel> call, Throwable t) {
-                //TODO update logic to handle server failure
+                Toast.makeText(MainActivity.this, "Something went wrong! Please try again later", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -427,9 +437,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         protected void onPostExecute(EmergencyPersonnel emergencyPersonnel) {
             super.onPostExecute(emergencyPersonnel);
             Log.d(TAG, "onPostExecute: called" );
-            statusText.setText((unitStatus == 0)? getString(R.string.unit_status_inactive):
+            statusText.setText((unitStatus == UNIT_INACTIVE)? getString(R.string.unit_status_inactive):
                     getString(R.string.unit_status_active));
-            statusQuestion.setText((unitStatus == 0)? getString(R.string.unit_active_question):
+            statusQuestion.setText((unitStatus == UNIT_INACTIVE)? getString(R.string.unit_active_question):
                     getString(R.string.unit_inactive_question));
             progressDialog.dismiss();
         }
@@ -461,7 +471,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
                 @Override
                 public void onFailure(Call<EmergencyPersonnel> call, Throwable t) {
-                    //TODO update logic to handle server failure
+                    Toast.makeText(MainActivity.this, "Something went wrong! Please try again later", Toast.LENGTH_SHORT).show();
                 }
             });
         }
