@@ -165,7 +165,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         if (googleApiClient != null)
             googleApiClient.disconnect();
     }
-
+    /**
+     * Backpress button has been overridden in order to prevent personnels from
+     * exiting the application without deactivating the unit
+     * #Bugfixed B|
+     */
     @Override
     public void onBackPressed() {
         if (unitStatus == UNIT_INACTIVE)

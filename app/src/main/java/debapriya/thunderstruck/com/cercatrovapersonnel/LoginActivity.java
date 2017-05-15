@@ -221,6 +221,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             AuthenticationPacket packet = null;
             try {
                 Encryption encryption = new Encryption();
+                //the packet is sent consisting of the email id of the user and the encrypted password
                 packet = new AuthenticationPacket(email, encryption.encryptPassword(password));
             } catch (Exception e) {
                 e.printStackTrace();

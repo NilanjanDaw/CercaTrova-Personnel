@@ -28,6 +28,9 @@ public class Encryption {
         cipher = Cipher.getInstance("AES");
     }
 
+    /*
+    conversion of byte array to hexadecimal
+     */
     private static String bytesToHex(byte[] bytes) {
         char[] hexChars = new char[bytes.length * 2];
         for ( int j = 0; j < bytes.length; j++ ) {
@@ -57,7 +60,10 @@ public class Encryption {
     {
 	   /* Encrypt the message. */
         Cipher cipher = null;
+        //the application calls the Cipher's getInstance method in order to create a Cipher object,
+        // and passes the name of the requested transformation to it
         cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        //A transformation is of the form : "algorithm/mode/padding"
         cipher.init(Cipher.ENCRYPT_MODE, secret);
         return cipher.doFinal(message.getBytes("UTF-8"));
     }
@@ -67,7 +73,10 @@ public class Encryption {
     {
 	    /* Decrypt the message, given derived encContentValues and initialization vector. */
         Cipher cipher = null;
+        //the application calls the Cipher's getInstance method in order to create a Cipher object,
+        // and passes the name of the requested transformation to it
         cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        //A transformation is of the form : "algorithm/mode/padding"
         cipher.init(Cipher.DECRYPT_MODE, secret);
         return new String(cipher.doFinal(cipherText), "UTF-8");
     }
